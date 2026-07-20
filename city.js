@@ -1,6 +1,51 @@
 const slug=new URLSearchParams(location.search).get('miasto');
 const city=CITIES.find(item=>item.slug===slug)||CITIES[0];
-document.title=`${city.name} — Studenci Polska`;
+const siteUrl='https://grupystudenckie.pl';
+const canonicalUrl=`${siteUrl}/city.html?miasto=${encodeURIComponent(city.slug)}`;
+const absoluteImage=`${siteUrl}/${city.image}`;
+const pageTitle=`${city.name} — grupy studenckie, uczelnie i wydarzenia`;
+const pageDescription=`${city.name} dla studentów: grupa miejska, grupy uczelniane, wydarzenia i najważniejsze informacje o studiowaniu. Dołącz do społeczności Studenci Polska.`;
+document.title=pageTitle;
+function setMeta(selector,attribute,value){
+  let element=document.head.querySelector(selector);
+  if(!element){element=document.createElement('meta');document.head.appendChild(element)}
+  element.setAttribute(attribute,value);
+}
+function setNamedMeta(name,value){setMeta(`meta[name="${name}"]`,'name',name);document.head.querySelector(`meta[name="${name}"]`).content=value}
+function setPropertyMeta(property,value){setMeta(`meta[property="${property}"]`,'property',property);document.head.querySelector(`meta[property="${property}"]`).content=value}
+setNamedMeta('description',pageDescription);
+setNamedMeta('twitter:title',pageTitle);
+setNamedMeta('twitter:description',pageDescription);
+setNamedMeta('twitter:image',absoluteImage);
+setPropertyMeta('og:title',pageTitle);
+setPropertyMeta('og:description',pageDescription);
+setPropertyMeta('og:url',canonicalUrl);
+setPropertyMeta('og:image',absoluteImage);
+setPropertyMeta('og:image:alt',`${city.name} — miasto akademickie`);
+let canonical=document.head.querySelector('link[rel="canonical"]');
+if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}
+canonical.href=canonicalUrl;
+const structuredData=document.createElement('script');
+structuredData.type='application/ld+json';
+structuredData.textContent=JSON.stringify({
+  '@context':'https://schema.org',
+  '@type':'CollectionPage',
+  name:pageTitle,
+  description:pageDescription,
+  url:canonicalUrl,
+  image:absoluteImage,
+  inLanguage:'pl-PL',
+  isPartOf:{'@type':'WebSite',name:'Studenci Polska',url:`${siteUrl}/`},
+  about:{'@type':'City',name:city.name,containedInPlace:{'@type':'AdministrativeArea',name:city.region}},
+  breadcrumb:{
+    '@type':'BreadcrumbList',
+    itemListElement:[
+      {'@type':'ListItem',position:1,name:'Miasta akademickie',item:`${siteUrl}/#miasta`},
+      {'@type':'ListItem',position:2,name:city.name,item:canonicalUrl}
+    ]
+  }
+});
+document.head.appendChild(structuredData);
 const universityGroups=UNIVERSITY_GROUPS[city.slug]||[];
 const universitySection=universityGroups.length?`<section class="universities-section"><div class="universities-head"><div><p class="overline blue">GRUPY UCZELNIANE</p><h2>Znajdź swoich<br><em>z uczelni.</em></h2></div><p>${universityGroups.length} grup dla studentów uczelni w mieście ${city.name}. Wybierz swoją szkołę i dołącz bezpośrednio na Facebooku.</p></div><div class="universities-grid">${universityGroups.map((group,index)=>`<a class="university-card" href="${group[2]}" target="_blank" rel="noopener noreferrer"><span class="university-number">${String(index+1).padStart(2,'0')}</span><strong>${group[0]}</strong><p>${group[1]}</p><i>↗</i></a>`).join('')}</div></section>`:'';
 const cityEvents=CITY_EVENTS[city.slug]||[];
