@@ -65,8 +65,19 @@ jobs:
         shell: bash
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
+      - name: Uzupełnij łańcuch certyfikatu Cyber_Folks
+        shell: bash
+        run: |
+          curl --fail --silent --show-error --location \
+            'https://certumdvtlsg2r39ca.repository.certum.pl/certumdvtlsg2r39ca.cer' \
+            --output certum-r39.cer
+          openssl x509 -inform DER -in certum-r39.cer -out certum-r39.pem
+          test "$(openssl x509 -in certum-r39.pem -noout -fingerprint -sha256 | cut -d= -f2)" = \
+            "83:C0:A5:A7:68:44:C8:40:DF:AF:82:0F:FD:02:AD:F6:57:3A:26:82:3E:F6:AF:75:8A:33:84:A0:AC:04:40:83"
+          cat /etc/ssl/certs/ca-certificates.crt certum-r39.pem > .ftp-ca-bundle.pem
+
       - name: Wyślij panel na Cyber_Folks
         shell: bash
         run: |
           FTP_URL=$(python3 -c 'import os, urllib.parse; print("ftp://" + urllib.parse.quote(os.environ["FTP_USER"], safe="") + ":" + urllib.parse.quote(os.environ["FTP_PASSWORD"], safe="") + "@" + os.environ["FTP_HOST"])')
-          lftp "$FTP_URL" -e "set cmd:fail-exit yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate yes; mirror --reverse --delete --verbose .analytics-deploy/ /; bye"
+          lftp "$FTP_URL" -e "set cmd:fail-exit yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate yes; set ssl:ca-file .ftp-ca-bundle.pem; mirror --reverse --delete --verbose .analytics-deploy/ /; bye"
