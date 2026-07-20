@@ -1,0 +1,11 @@
+.city-hero { height: 460px; min-height: 0; }
+.city-hero-copy { bottom: 42px; }
+.city-hero h1 { font-size: clamp(58px, 8vw, 108px); letter-spacing: -5px; margin: 16px 0; }
+.city-hero-copy > p:not(.overline) { margin-bottom: 0; }
+@media (max-width: 530px) {
+  .city-hero { height: 370px; }
+  .city-hero-copy { bottom: 28px; }
+  .city-hero h1 { font-size: clamp(52px, 17vw, 76px); letter-spacing: -3px; }
+  .city-hero-copy > p:not(.overline) { font-size: 12px; line-height: 1.5; }
+  .city-hero .button { margin-top: 12px; padding: 13px 16px; }
+}

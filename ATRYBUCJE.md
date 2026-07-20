@@ -1,0 +1,43 @@
+﻿# Źródła fotografii
+
+Fotografie pobrano z projektów Wikimedia. Link przy każdym mieście prowadzi do strony źródłowej i informacji licencyjnych.
+
+- [Białystok](https://pl.wikipedia.org/wiki/Bia%C5%82ystok) — plik: Białystok_Rynek_Kościuszki.jpg
+- [Bielsko-Biała](https://pl.wikipedia.org/wiki/Bielsko-Bia%C5%82a) — plik: Bielsko-Biała_Montage_2.jpg
+- [Bydgoszcz](https://pl.wikipedia.org/wiki/Bydgoszcz) — plik: Collage_Bydgoszcz.jpg
+- [Chełm](https://pl.wikipedia.org/wiki/Che%C5%82m) — plik: Górka_katedralna.jpg
+- [Chorzów](https://pl.wikipedia.org/wiki/Chorz%C3%B3w) — plik: Chorzow_poczta2.jpg
+- [Ciechanów](https://pl.wikipedia.org/wiki/Ciechan%C3%B3w) — plik: Ciechanów_-_widok_ogólny_2026.jpg
+- [Częstochowa](https://pl.wikipedia.org/wiki/Cz%C4%99stochowa) — plik: Częstochowa_Collage.png
+- [Dąbrowa Górnicza](https://pl.wikipedia.org/wiki/D%C4%85browa_G%C3%B3rnicza) — plik: Bazylika_Najświętszej_Maryi_Panny_Anielskiej_w_Dąbrowie_Górniczej_03.JPG
+- [Elbląg](https://pl.wikipedia.org/wiki/Elbl%C4%85g) — plik: Elbląg_-_Stare_Miasto.jpg
+- [Gliwice](https://pl.wikipedia.org/wiki/Gliwice) — plik: Kłodnica.JPG
+- [Gniezno](https://pl.wikipedia.org/wiki/Gniezno) — plik: Catedral_de_Gniezno,_Gniezno,_Polonia,_2014-09-20,_DD_40-42_HDR.jpg
+- [Gorzów Wielkopolski](https://pl.wikipedia.org/wiki/Gorz%C3%B3w_Wielkopolski) — plik: Collage_of_views_of_Gorzow_Wielkopolski,_Poland.jpg
+- [Jelenia Góra](https://pl.wikipedia.org/wiki/Jelenia_G%C3%B3ra) — plik: Jelenia_Gora_widok_z_Lysej_Gory.png
+- [Kalisz](https://pl.wikipedia.org/wiki/Kalisz) — plik: Kalisz_collage.jpg
+- [Katowice](https://pl.wikipedia.org/wiki/Katowice) — plik: Katowice_collage_v._2023.jpg
+- [Kielce](https://pl.wikipedia.org/wiki/Kielce) — plik: Collage_of_views_of_Kielce.png
+- [Konin](https://pl.wikipedia.org/wiki/Konin) — plik: Rynek_w_Koninie.jpg
+- [Koszalin](https://pl.wikipedia.org/wiki/Koszalin) — plik: Koszalin_Rynek_Staromiejski_w_2014_roku.jpg
+- [Kraków](https://pl.wikipedia.org/wiki/Krak%C3%B3w) — plik: Kolaż_Krakowa.JPG
+- [Legnica](https://pl.wikipedia.org/wiki/Legnica) — plik: Legnica_miasto.png
+- [Leszno](https://pl.wikipedia.org/wiki/Leszno) — plik: Leszno_Town_hall_2022.jpg
+- [Lublin](https://pl.wikipedia.org/wiki/Lublin) — plik: Lublin_kolaż.jpg
+- [Nowy Sącz](https://pl.wikipedia.org/wiki/Nowy_S%C4%85cz) — plik: Ratusz_Nowy_Sącz.jpg
+- [Olsztyn](https://pl.wikipedia.org/wiki/Olsztyn) — plik: KOS_Collage_Olsztyn.jpg
+- [Opole](https://pl.wikipedia.org/wiki/Opole) — plik: Budynek_dawnej_Rejencji_Opolskiej_z_Wieżą_Piastowską.jpg
+- [Poznań](https://pl.wikipedia.org/wiki/Pozna%C5%84) — plik: Collage_of_main_sights_of_Poznań.png
+- [Płock](https://pl.wikipedia.org/wiki/P%C5%82ock) — plik: Płock_panorama.jpg
+- [Radom](https://pl.wikipedia.org/wiki/Radom) — plik: Radom_montage1.png
+- [Siedlce](https://pl.wikipedia.org/wiki/Siedlce) — plik: Kolaż_miasta_Siedlce.jpg
+- [Szczecin](https://pl.wikipedia.org/wiki/Szczecin) — plik: Collage_of_Szczecin.png
+- [Słupsk](https://pl.wikipedia.org/wiki/S%C5%82upsk) — plik: Słupsk_2025.png
+- [Tarnów](https://pl.wikipedia.org/wiki/Tarn%C3%B3w) — plik: Collage_of_views_of_Tarnow.png
+- [Wałbrzych](https://pl.wikipedia.org/wiki/Wa%C5%82brzych) — plik: Wałbrzych_collage.jpg
+- [Wrocław](https://pl.wikipedia.org/wiki/Wroc%C5%82aw) — plik: Wrocław_Collage.png
+- [Włocławek](https://pl.wikipedia.org/wiki/W%C5%82oc%C5%82awek) — plik: Kolaż_Włocławka_2021.jpg
+- [Zamość](https://pl.wikipedia.org/wiki/Zamo%C5%9B%C4%87) — plik: ZAMOŚĆ,_AB-016.jpg
+- [Zielona Góra](https://pl.wikipedia.org/wiki/Zielona_G%C3%B3ra) — plik: Zielona_Góra_kolaż.jpg
+- [Łomża](https://pl.wikipedia.org/wiki/%C5%81om%C5%BCa) — plik: Old_Market_Square_in_Łomża_(1)_(cropped).jpg
+- [Łódź](https://pl.wikipedia.org/wiki/%C5%81%C3%B3d%C5%BA) — plik: Lodz_Collage_2017_(by_EL-042).png
