@@ -9,3 +9,31 @@
   .city-hero-copy > p:not(.overline) { font-size: 12px; line-height: 1.5; }
   .city-hero .button { margin-top: 12px; padding: 13px 16px; }
 }
+
+.footer-link { font-size: 11px; color: #fff; border-bottom: 1px solid #ffffff66; padding-bottom: 3px; }
+.city-seo { padding: 110px 8vw; border-top: 1px solid var(--line); background: #faf8f2; }
+.city-seo-head { display: grid; grid-template-columns: 1.2fr .8fr; align-items: end; gap: 70px; max-width: 1420px; margin: 0 auto 56px; }
+.city-seo-head > p { max-width: 430px; color: #64707c; font-size: 13px; line-height: 1.8; }
+.city-seo-details { max-width: 1420px; margin: auto; border-top: 1px solid var(--line); }
+.city-seo details { border-bottom: 1px solid var(--line); }
+.city-seo summary { min-height: 86px; display: grid; grid-template-columns: 52px 1fr 30px; align-items: center; gap: 18px; list-style: none; cursor: pointer; }
+.city-seo summary::-webkit-details-marker { display: none; }
+.city-seo summary span { font: italic 700 18px 'Playfair Display'; color: var(--red); }
+.city-seo summary strong { font-size: 17px; }
+.city-seo summary i { font-style: normal; font-size: 24px; font-weight: 400; transition: transform .25s; }
+.city-seo details[open] summary i { transform: rotate(45deg); }
+.seo-detail-body { padding: 0 48px 34px 70px; max-width: 940px; color: #566574; font-size: 14px; line-height: 1.9; }
+.seo-detail-body p { margin: 0 0 18px; }
+.seo-detail-body ul { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px 34px; margin: 0 0 22px; padding-left: 20px; }
+.seo-detail-body a { display: inline-block; color: var(--blue); font-weight: 800; border-bottom: 1px solid currentColor; }
+@media (max-width: 800px) {
+  .city-seo { padding: 80px 6vw; }
+  .city-seo-head { grid-template-columns: 1fr; gap: 25px; }
+  .seo-detail-body ul { grid-template-columns: 1fr; }
+}
+@media (max-width: 530px) {
+  .city-seo { padding: 65px 6vw; }
+  .city-seo summary { grid-template-columns: 38px 1fr 22px; min-height: 76px; gap: 10px; }
+  .city-seo summary strong { font-size: 14px; line-height: 1.4; }
+  .seo-detail-body { padding: 0 0 28px 48px; font-size: 13px; }
+}
