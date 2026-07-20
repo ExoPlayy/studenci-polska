@@ -61,10 +61,6 @@ jobs:
           '
           rm -f .analytics-deploy/config.example.php
 
-      - name: Zainstaluj bezpieczny klient FTP
-        shell: bash
-        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
-
       - name: Uzupełnij łańcuch certyfikatu Cyber_Folks
         shell: bash
         run: |
@@ -79,4 +75,11 @@ jobs:
       - name: Wyślij panel na Cyber_Folks
         shell: bash
         run: |
-          lftp -u "$FTP_USER","$FTP_PASSWORD" "ftp://$FTP_HOST" -e "set cmd:fail-exit yes; set net:max-retries 1; set net:timeout 20; set ftp:use-host-command no; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate yes; set ssl:ca-file .ftp-ca-bundle.pem; mirror --reverse --delete --verbose .analytics-deploy/ /; bye"
+          while IFS= read -r -d '' file; do
+            remote_path="${file#.analytics-deploy/}"
+            curl --fail --silent --show-error \
+              --connect-timeout 20 --max-time 120 \
+              --ftp-create-dirs --ssl-reqd --cacert .ftp-ca-bundle.pem \
+              --user "$FTP_USER:$FTP_PASSWORD" \
+              --upload-file "$file" "ftp://$FTP_HOST/$remote_path"
+          done < <(find .analytics-deploy -type f -print0)
