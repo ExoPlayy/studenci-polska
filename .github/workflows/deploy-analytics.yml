@@ -79,4 +79,4 @@ jobs:
       - name: Wyślij panel na Cyber_Folks
         shell: bash
         run: |
-          lftp -u "$FTP_USER","$FTP_PASSWORD" "ftp://$FTP_HOST" -e "set cmd:fail-exit yes; set net:max-retries 1; set net:timeout 20; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate yes; set ssl:ca-file .ftp-ca-bundle.pem; mirror --reverse --delete --verbose .analytics-deploy/ /; bye"
+          lftp -d -u "$FTP_USER","$FTP_PASSWORD" "ftp://$FTP_HOST" -e "set cmd:fail-exit yes; set net:max-retries 1; set net:timeout 20; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate yes; set ssl:ca-file .ftp-ca-bundle.pem; mirror --reverse --delete --verbose .analytics-deploy/ /; bye"
