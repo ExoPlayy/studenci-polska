@@ -22,3 +22,4 @@
 @media(max-width:800px){.hero-groups{grid-template-columns:1fr 1fr;grid-template-rows:1fr}.hero-group-card{min-height:330px}}
 @media(max-width:530px){.hero-groups{grid-template-columns:1fr;grid-template-rows:1fr 1fr}.hero-group-card{min-height:300px}.hero-group-copy strong{font-size:34px}}
 @media(max-width:600px){.newsletter-strip{align-items:flex-start;flex-direction:column;padding:23px 6vw}.newsletter-strip>a{width:100%}.newsletter-strip strong{font-size:17px}}
+.newsletter-strip{margin-top:12px}
