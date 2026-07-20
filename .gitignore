@@ -2,3 +2,5 @@ assets/cities/
 assets/generated-v2/
 assets/photos/
 assets/polska-studencka-hero.png
+analytics/.analytics-config.php
+.analytics-deploy/

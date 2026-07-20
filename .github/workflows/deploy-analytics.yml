@@ -1,0 +1,72 @@
+name: Wdrożenie prywatnych statystyk
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "analytics/**"
+      - ".github/workflows/deploy-analytics.yml"
+
+concurrency:
+  group: analytics-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      FTP_HOST: s184.cyber-folks.pl
+      FTP_USER: stats@grupystudenckie.pl
+      FTP_PASSWORD: ${{ secrets.CF_FTP_PASSWORD }}
+      DB_PASSWORD: ${{ secrets.ANALYTICS_DB_PASSWORD }}
+      ADMIN_PASSWORD: ${{ secrets.ANALYTICS_ADMIN_PASSWORD }}
+    steps:
+      - name: Pobierz pliki
+        uses: actions/checkout@v4
+
+      - name: Sprawdź kod panelu
+        shell: bash
+        run: find analytics -name '*.php' -print0 | xargs -0 -n1 php -l
+
+      - name: Sprawdź wymagane sekrety
+        shell: bash
+        run: |
+          test -n "$FTP_PASSWORD" || { echo "Brakuje sekretu CF_FTP_PASSWORD"; exit 1; }
+          test -n "$DB_PASSWORD" || { echo "Brakuje sekretu ANALYTICS_DB_PASSWORD"; exit 1; }
+          test -n "$ADMIN_PASSWORD" || { echo "Brakuje sekretu ANALYTICS_ADMIN_PASSWORD"; exit 1; }
+
+      - name: Przygotuj bezpieczną konfigurację
+        shell: bash
+        run: |
+          mkdir -p .analytics-deploy
+          cp -a analytics/. .analytics-deploy/
+          php -r '
+            $db = getenv("DB_PASSWORD");
+            $admin = getenv("ADMIN_PASSWORD");
+            $config = [
+              "db_host" => "localhost",
+              "db_name" => "oazapl_stats",
+              "db_user" => "oazapl_stats",
+              "db_password" => $db,
+              "admin_password_hash" => password_hash($admin, PASSWORD_DEFAULT),
+              "hash_key" => hash_hmac("sha256", $db, $admin),
+              "allowed_origins" => [
+                "https://grupystudenckie.pl",
+                "https://www.grupystudenckie.pl",
+                "https://exoplayy.github.io"
+              ]
+            ];
+            file_put_contents(".analytics-deploy/.analytics-config.php", "<?php\nreturn " . var_export($config, true) . ";\n");
+          '
+          rm -f .analytics-deploy/config.example.php
+
+      - name: Zainstaluj bezpieczny klient FTP
+        shell: bash
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Wyślij panel na Cyber_Folks
+        shell: bash
+        run: |
+          FTP_URL=$(python3 -c 'import os, urllib.parse; print("ftp://" + urllib.parse.quote(os.environ["FTP_USER"], safe="") + ":" + urllib.parse.quote(os.environ["FTP_PASSWORD"], safe="") + "@" + os.environ["FTP_HOST"])')
+          lftp "$FTP_URL" -e "set cmd:fail-exit yes; set ftp:ssl-force yes; set ftp:ssl-protect-data yes; set ssl:verify-certificate yes; mirror --reverse --delete --verbose .analytics-deploy/ /; bye"
