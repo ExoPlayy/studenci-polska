@@ -75,6 +75,15 @@ jobs:
       - name: Wyślij panel na Cyber_Folks
         shell: bash
         run: |
+          # Najpierw sprawdzamy samo logowanie i katalog. GitHub automatycznie
+          # maskuje wartość sekretu w logach, a szczegóły odpowiedzi serwera
+          # pozwalają odróżnić błędne dane od blokady połączenia.
+          curl --fail --verbose \
+            --connect-timeout 20 --max-time 60 \
+            --ssl-reqd --cacert .ftp-ca-bundle.pem \
+            --user "$FTP_USER:$FTP_PASSWORD" \
+            --list-only "ftp://$FTP_HOST/"
+
           while IFS= read -r -d '' file; do
             remote_path="${file#.analytics-deploy/}"
             curl --fail --silent --show-error \
