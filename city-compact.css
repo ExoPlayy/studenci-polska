@@ -26,10 +26,13 @@
 .seo-detail-body p { margin: 0 0 18px; }
 .seo-detail-body ul { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px 34px; margin: 0 0 22px; padding-left: 20px; }
 .seo-detail-body a { display: inline-block; color: var(--blue); font-weight: 800; border-bottom: 1px solid currentColor; }
+.seo-detail-body.guide-links { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 28px; max-width: 1040px; }
+.seo-detail-body.guide-links a { padding: 13px 0; }
 @media (max-width: 800px) {
   .city-seo { padding: 80px 6vw; }
   .city-seo-head { grid-template-columns: 1fr; gap: 25px; }
   .seo-detail-body ul { grid-template-columns: 1fr; }
+  .seo-detail-body.guide-links { grid-template-columns: 1fr; }
 }
 @media (max-width: 530px) {
   .city-seo { padding: 65px 6vw; }

@@ -1,4 +1,6 @@
 const grid=document.getElementById('cityGrid');
+const mainNav=document.querySelector('.topbar nav');
+if(mainNav&&!mainNav.querySelector('[href="poradniki.html"]'))mainNav.insertAdjacentHTML('beforeend','<a href="poradniki.html">Poradniki</a>');
 document.querySelector('footer small')?.insertAdjacentHTML('beforebegin','<a href="poradniki.html" style="font-size:11px;color:#fff;border-bottom:1px solid #ffffff66;padding-bottom:3px">Poradniki dla studentów</a>');
 const input=document.getElementById('search');
 const counter=document.getElementById('counter');
