@@ -7,7 +7,8 @@
 
   const endpoint = 'https://stats.grupystudenckie.pl/collect.php';
   const query = new URLSearchParams(window.location.search);
-  const currentCity = query.get('miasto') || '';
+  const pathCity = window.location.pathname.split('/').filter(Boolean)[0] || '';
+  const currentCity = document.body.dataset.citySlug || query.get('miasto') || (pathCity && !pathCity.includes('.') ? pathCity : '');
   const campaign = {
     utm_source: query.get('utm_source') || '',
     utm_medium: query.get('utm_medium') || '',
@@ -53,7 +54,9 @@
 
   function cityFromLink(link) {
     try {
-      return new URL(link.href, window.location.href).searchParams.get('miasto') || '';
+      const url = new URL(link.href, window.location.href);
+      const cleanSlug = url.pathname.split('/').filter(Boolean)[0] || '';
+      return url.searchParams.get('miasto') || (cleanSlug && !cleanSlug.includes('.') ? cleanSlug : '');
     } catch (error) {
       return '';
     }

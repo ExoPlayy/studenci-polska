@@ -6,6 +6,9 @@ const input=document.getElementById('search');
 const counter=document.getElementById('counter');
 const empty=document.getElementById('empty');
 const siteUrl='https://grupystudenckie.pl';
+const isLocalFile=location.protocol==='file:';
+const cityUrl=slug=>isLocalFile?`city.html?miasto=${slug}`:`/${slug}/`;
+const optimizedImage=image=>`${isLocalFile?'':'/'}${image.replace(/\.(?:jpe?g|png)$/i,'.webp')}`;
 const structuredData=document.createElement('script');
 structuredData.type='application/ld+json';
 structuredData.textContent=JSON.stringify({
@@ -35,7 +38,7 @@ structuredData.textContent=JSON.stringify({
     ...CITIES.map(city=>({
       '@type':'WebPage',
       name:`Studenci ${city.name}`,
-      url:`${siteUrl}/city.html?miasto=${encodeURIComponent(city.slug)}`,
+      url:`${siteUrl}/${encodeURIComponent(city.slug)}/`,
       about:`Studia, uczelnie, wydarzenia i grupy studenckie w mieście ${city.name}`
     }))
   ],
@@ -46,12 +49,12 @@ structuredData.textContent=JSON.stringify({
       '@type':'ListItem',
       position:index+1,
       name:city.name,
-      url:`${siteUrl}/city.html?miasto=${encodeURIComponent(city.slug)}`
+      url:`${siteUrl}/${encodeURIComponent(city.slug)}/`
     }))
   }
 });
 document.head.appendChild(structuredData);
-function render(list){grid.innerHTML=list.map(c=>`<a class="city-card" href="city.html?miasto=${c.slug}" aria-label="Otwórz przewodnik: ${c.name}"><img src="${c.image}" alt="${c.name} — miejski krajobraz" loading="lazy"><span class="num">${c.number}</span><span class="go">↗</span><div class="card-copy"><small>${c.region.toUpperCase()}</small><h3>${c.name}</h3><p>${c.tag}</p></div></a>`).join('');counter.textContent=`${list.length} ${list.length===1?'miasto':'miasta'}`;empty.style.display=list.length?'none':'block'}
+function render(list){grid.innerHTML=list.map(c=>`<a class="city-card" href="${cityUrl(c.slug)}" aria-label="Otwórz przewodnik: ${c.name}"><img src="${optimizedImage(c.image)}" alt="${c.name} — miejski krajobraz" loading="lazy" decoding="async"><span class="num">${c.number}</span><span class="go">↗</span><div class="card-copy"><small>${c.region.toUpperCase()}</small><h3>${c.name}</h3><p>${c.tag}</p></div></a>`).join('');counter.textContent=`${list.length} ${list.length===1?'miasto':'miasta'}`;empty.style.display=list.length?'none':'block'}
 function filterCities(){const q=input.value.toLocaleLowerCase('pl').trim();render(CITIES.filter(c=>`${c.name} ${c.region} ${c.tag}`.toLocaleLowerCase('pl').includes(q)))}
 const initialQuery=new URLSearchParams(location.search).get('q');
 if(initialQuery)input.value=initialQuery;
