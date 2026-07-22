@@ -134,18 +134,18 @@ if ($authenticated && $pdo instanceof PDO) {
         'Główne grupy miejskie' => 'city_group_click',
         'Kafelki miast' => 'city_click',
     ] as $title => $eventName) {
-        $detailLists[$title] = analytics_rows($pdo, "SELECT COALESCE(NULLIF(item_name, ''), NULLIF(city_slug, ''), 'Bez nazwy') AS label, city_slug, COUNT(*) AS total FROM analytics_events WHERE $where AND event_name = ? GROUP BY label, city_slug ORDER BY total DESC LIMIT 50", array_merge($params, [$eventName]));
+        $detailLists[$title] = analytics_rows($pdo, "SELECT COALESCE(NULLIF(item_name, ''), NULLIF(city_slug, ''), 'Bez nazwy') AS label, city_slug, MAX(target_url) AS target_url, MAX(target_host) AS target_host, COUNT(*) AS total FROM analytics_events WHERE $where AND event_name = ? GROUP BY label, city_slug ORDER BY total DESC LIMIT 50", array_merge($params, [$eventName]));
     }
     $otherButtons = analytics_rows($pdo, "SELECT event_name AS label, COUNT(*) AS total FROM analytics_events WHERE $where AND event_name IN ('newsletter_click','insurance_click','national_group_click','candidate_group_click','next_city_click') GROUP BY event_name ORDER BY total DESC", $params);
-    $recentClicks = analytics_rows($pdo, "SELECT created_at, event_name, city_slug, item_name FROM analytics_events WHERE $where AND event_name <> 'page_view' ORDER BY created_at DESC LIMIT 30", $params);
+    $recentClicks = analytics_rows($pdo, "SELECT created_at, event_name, city_slug, item_name, target_url, target_host FROM analytics_events WHERE $where AND event_name <> 'page_view' ORDER BY created_at DESC LIMIT 30", $params);
 
     if (isset($_GET['export']) && $_GET['export'] === 'csv') {
         header('Content-Type: text/csv; charset=utf-8');
         header('Content-Disposition: attachment; filename="statystyki-' . date('Y-m-d') . '.csv"');
         echo "\xEF\xBB\xBF";
         $output = fopen('php://output', 'wb');
-        fputcsv($output, ['data', 'zdarzenie', 'miasto', 'element', 'strona', 'urządzenie'], ';');
-        $export = analytics_rows($pdo, "SELECT created_at, event_name, city_slug, item_name, page_path, device_type FROM analytics_events WHERE $where ORDER BY created_at DESC LIMIT 50000", $params);
+        fputcsv($output, ['data', 'zdarzenie', 'miasto', 'element', 'klikniety_link', 'strona', 'urządzenie'], ';');
+        $export = analytics_rows($pdo, "SELECT created_at, event_name, city_slug, item_name, target_url, page_path, device_type FROM analytics_events WHERE $where ORDER BY created_at DESC LIMIT 50000", $params);
         foreach ($export as $row) {
             fputcsv($output, array_map(static fn($value) => csv_safe((string) $value), array_values($row)), ';');
         }
@@ -173,6 +173,7 @@ $eventLabels = [
     <meta name="robots" content="noindex,nofollow,noarchive">
     <title>Statystyki — Studenci Polska</title>
     <link rel="stylesheet" href="panel.css">
+    <link rel="stylesheet" href="panel-extra.css">
 </head>
 <body>
 <?php if (!$authenticated): ?>
@@ -244,7 +245,7 @@ $eventLabels = [
                 <div class="panel-title"><h2><?= h($title) ?></h2><span class="panel-total"><?= array_sum(array_map(static fn($r) => (int) $r['total'], $rows)) ?> kliknięć</span></div>
                 <div class="ranking">
                     <?php foreach ($rows as $index => $row): ?>
-                    <div class="rank"><span><?= str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) ?></span><div><p><b title="<?= h($row['label']) ?>"><?= h($row['label']) ?></b><strong><?= (int) $row['total'] ?></strong></p><?php if (!empty($row['city_slug'])): ?><small><?= h(ucfirst(str_replace('-', ' ', (string) $row['city_slug']))) ?></small><?php endif; ?><i style="width:<?= max(2, (int) round(((int) $row['total'] / $max) * 100)) ?>%"></i></div></div>
+                    <div class="rank"><span><?= str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT) ?></span><div><p><b title="<?= h($row['label']) ?>"><?= h($row['label']) ?></b><strong><?= (int) $row['total'] ?></strong></p><?php if (!empty($row['city_slug'])): ?><small><?= h(ucfirst(str_replace('-', ' ', (string) $row['city_slug']))) ?></small><?php endif; ?><?php if (!empty($row['target_url'])): ?><small class="target-url"><a href="<?= h($row['target_url']) ?>" target="_blank" rel="noopener noreferrer"><?= h($row['target_host'] ?: $row['target_url']) ?></a></small><?php endif; ?><i style="width:<?= max(2, (int) round(((int) $row['total'] / $max) * 100)) ?>%"></i></div></div>
                     <?php endforeach; ?>
                     <?php if (!$rows): ?><p class="empty">Brak takich kliknięć dla wybranych filtrów.</p><?php endif; ?>
                 </div>
@@ -263,8 +264,8 @@ $eventLabels = [
         <section class="panel wide recent-panel">
             <div class="panel-title"><div><p class="eyebrow">NAJNOWSZE DANE</p><h2>Ostatnie kliknięcia</h2></div></div>
             <div class="recent-table">
-                <div class="recent-head"><span>Czas</span><span>Rodzaj</span><span>Miasto</span><span>Element</span></div>
-                <?php foreach ($recentClicks as $row): ?><div class="recent-row"><time><?= h(date('d.m H:i', strtotime((string) $row['created_at']))) ?></time><span><?= h($eventLabels[$row['event_name']] ?? $row['event_name']) ?></span><span><?= h($row['city_slug'] ? ucfirst(str_replace('-', ' ', (string) $row['city_slug'])) : '—') ?></span><b title="<?= h($row['item_name'] ?? '') ?>"><?= h($row['item_name'] ?: '—') ?></b></div><?php endforeach; ?>
+                <div class="recent-head"><span>Czas</span><span>Rodzaj</span><span>Miasto</span><span>Element i link</span></div>
+                <?php foreach ($recentClicks as $row): ?><div class="recent-row"><time><?= h(date('d.m H:i', strtotime((string) $row['created_at']))) ?></time><span><?= h($eventLabels[$row['event_name']] ?? $row['event_name']) ?></span><span><?= h($row['city_slug'] ? ucfirst(str_replace('-', ' ', (string) $row['city_slug'])) : '—') ?></span><b title="<?= h(($row['item_name'] ?? '') . ' ' . ($row['target_url'] ?? '')) ?>"><?= h($row['item_name'] ?: '—') ?><?php if (!empty($row['target_url'])): ?><small><a href="<?= h($row['target_url']) ?>" target="_blank" rel="noopener noreferrer"><?= h($row['target_host'] ?: $row['target_url']) ?></a></small><?php endif; ?></b></div><?php endforeach; ?>
                 <?php if (!$recentClicks): ?><p class="empty">Brak kliknięć dla wybranych filtrów.</p><?php endif; ?>
             </div>
         </section>

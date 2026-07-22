@@ -1,0 +1,21 @@
+.detail-grid .rank small.target-url {
+  margin-top: -3px;
+  text-transform: none;
+}
+
+.target-url a,
+.recent-row small a {
+  color: var(--blue);
+  border-bottom: 1px solid #165dff55;
+}
+
+.recent-row b small {
+  display: block;
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--blue);
+  font-weight: 600;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+}

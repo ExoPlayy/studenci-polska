@@ -28,11 +28,19 @@
 .seo-detail-body a { display: inline-block; color: var(--blue); font-weight: 800; border-bottom: 1px solid currentColor; }
 .seo-detail-body.guide-links { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 28px; max-width: 1040px; }
 .seo-detail-body.guide-links a { padding: 13px 0; }
+.city-seo-universities { padding-top: 85px; background: #f5f1e8; }
+.city-seo-universities .city-seo-head { margin-bottom: 42px; }
+.university-seo-list { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1px; max-width: 1420px; margin: auto; background: var(--line); border: 1px solid var(--line); }
+.university-seo-list article { min-height: 220px; padding: 28px; background: #fff; }
+.university-seo-list h3 { margin: 0 0 14px; color: var(--ink); font-size: 18px; letter-spacing: -.3px; line-height: 1.25; }
+.university-seo-list p { margin: 0 0 18px; color: #566574; font-size: 13px; line-height: 1.75; }
+.university-seo-list a { color: var(--blue); font-size: 12px; font-weight: 800; border-bottom: 1px solid currentColor; }
 @media (max-width: 800px) {
   .city-seo { padding: 80px 6vw; }
   .city-seo-head { grid-template-columns: 1fr; gap: 25px; }
   .seo-detail-body ul { grid-template-columns: 1fr; }
   .seo-detail-body.guide-links { grid-template-columns: 1fr; }
+  .university-seo-list { grid-template-columns: 1fr; }
 }
 @media (max-width: 530px) {
   .city-seo { padding: 65px 6vw; }

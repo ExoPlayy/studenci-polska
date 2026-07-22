@@ -77,8 +77,8 @@ try {
     }
 
     $insert = $pdo->prepare('INSERT INTO analytics_events
-        (visitor_hash, event_name, page_path, city_slug, item_name, target_host, referrer_host, utm_source, utm_medium, utm_campaign, device_type)
-        VALUES (?, ?, ?, NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), ?)');
+        (visitor_hash, event_name, page_path, city_slug, item_name, target_host, target_url, referrer_host, utm_source, utm_medium, utm_campaign, device_type)
+        VALUES (?, ?, ?, NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), NULLIF(?, ""), ?)');
     $device = analytics_text($data['device'] ?? 'desktop', 20);
     if (!in_array($device, ['mobile', 'tablet', 'desktop'], true)) {
         $device = 'desktop';
@@ -90,6 +90,7 @@ try {
         analytics_text($data['city'] ?? '', 80),
         analytics_text($data['name'] ?? '', 190),
         analytics_host($data['target'] ?? ''),
+        analytics_url($data['target'] ?? ''),
         analytics_host($data['referrer'] ?? ''),
         analytics_text($data['utm_source'] ?? '', 100),
         analytics_text($data['utm_medium'] ?? '', 100),
