@@ -15,7 +15,7 @@ const cityEvents=CITY_EVENTS[city.slug]||[];
 const universityNames=universityGroups.map(group=>group[1]).filter(Boolean);
 const siteUrl='https://grupystudenckie.pl';
 const canonicalUrl=`${siteUrl}${cityUrl(city.slug)}`;
-const absoluteImage=`${siteUrl}${optimizedImage(city.image)}`;
+const absoluteImage=`${siteUrl}/assets/share/${city.slug}.jpg`;
 const pageTitle=`${city.name} — grupy studenckie, uczelnie i wydarzenia`;
 const pageDescription=universityNames.length?`${city.name} dla studentów: grupy uczelniane, wydarzenia, atrakcje i praktyczny przewodnik. Sprawdź m.in. ${universityNames.slice(0,3).join(', ')}.`:`${city.name} dla studentów: grupy studenckie, wydarzenia, atrakcje oraz praktyczne porady o mieszkaniu i codziennym życiu w mieście.`;
 document.title=pageTitle;
@@ -35,6 +35,10 @@ setPropertyMeta('og:description',pageDescription);
 setPropertyMeta('og:url',canonicalUrl);
 setPropertyMeta('og:image',absoluteImage);
 setPropertyMeta('og:image:alt',`${city.name} — miasto akademickie`);
+setPropertyMeta('og:image:secure_url',absoluteImage);
+setPropertyMeta('og:image:type','image/jpeg');
+setPropertyMeta('og:image:width','1200');
+setPropertyMeta('og:image:height','630');
 let canonical=document.head.querySelector('link[rel="canonical"]');
 if(!canonical){canonical=document.createElement('link');canonical.rel='canonical';document.head.appendChild(canonical)}
 canonical.href=canonicalUrl;
@@ -58,7 +62,7 @@ structuredData.textContent=JSON.stringify({
     ]
   }
 });
-document.head.appendChild(structuredData);
+if(!document.head.querySelector('script[data-city-schema]')) document.head.appendChild(structuredData);
 if(universityGroups.length||cityEvents.length){
   const localData=document.createElement('script');
   localData.type='application/ld+json';
@@ -73,7 +77,7 @@ if(universityGroups.length||cityEvents.length){
       ...cityEvents.map((event,index)=>({'@type':'ListItem',position:universityGroups.length+index+1,name:event[0],url:event[2]}))
     ]
   });
-  document.head.appendChild(localData);
+  if(!document.head.querySelector('script[data-city-schema]')) document.head.appendChild(localData);
 }
 const universitySection=universityGroups.length?`<section class="universities-section"><div class="universities-head"><div><p class="overline blue">GRUPY UCZELNIANE</p><h2>Znajdź swoich<br><em>z uczelni.</em></h2></div><p>${universityGroups.length} grup dla studentów uczelni w ${cityLocative}. Wybierz swoją szkołę i dołącz bezpośrednio na Facebooku.</p></div><div class="universities-grid">${universityGroups.map((group,index)=>`<a class="university-card" href="${group[2]}" target="_blank" rel="noopener noreferrer"><span class="university-number">${String(index+1).padStart(2,'0')}</span><strong>${group[0]}</strong><p>${group[1]}</p><i>↗</i></a>`).join('')}</div></section>`:'';
 const attractionAnswer=seoContent?.attractions?.length?`Po zajęciach w ${cityLocative} warto sprawdzić między innymi: ${seoContent.attractions.join(', ')}. To dobre punkty startowe do poznawania miasta ze znajomymi z roku, grupy uczelnianej albo wydarzeń studenckich.`:`W ${cityLocative} warto śledzić centrum, okolice uczelni, lokalne wydarzenia, kluby studenckie, kawiarnie i miejsca spotkań polecane przez osoby z grup miejskich oraz uczelnianych.`;
@@ -89,7 +93,7 @@ const cityFaqItems=[
 const faqData=document.createElement('script');
 faqData.type='application/ld+json';
 faqData.textContent=JSON.stringify({'@context':'https://schema.org','@type':'FAQPage',mainEntity:cityFaqItems.map(item=>({'@type':'Question',name:item[0],acceptedAnswer:{'@type':'Answer',text:item[1]}}))});
-document.head.appendChild(faqData);
+if(!document.head.querySelector('script[data-city-schema]')) document.head.appendChild(faqData);
 const seoSection=seoContent?`<section class="city-seo" aria-labelledby="city-guide-title"><div class="city-seo-head"><div><p class="overline blue">PRZEWODNIK STUDENCKI</p><h2 id="city-guide-title">${city.name}<br><em>dla studentów.</em></h2></div><p>Praktyczne informacje na spokojny start. Najważniejsze grupy i wydarzenia pozostają wyżej — tutaj możesz rozwinąć tylko potrzebny temat.</p></div><div class="city-seo-details"><details><summary><span>01</span><strong>Jak wygląda życie studenckie w ${cityLocative}?</strong><i>+</i></summary><div class="seo-detail-body"><p>${seoContent.life}</p><p>Decydując się na studia w ${cityLocative}, warto porównać nie tylko uczelnie, ale też lokalizację wydziału, komunikację i możliwości spędzania czasu po zajęciach.</p></div></details><details><summary><span>02</span><strong>Atrakcje studenckie i miejsca warte poznania</strong><i>+</i></summary><div class="seo-detail-body"><p>Po zajęciach warto zobaczyć miejsca, które najlepiej pokazują charakter miasta:</p><ul>${seoContent.attractions.map(place=>`<li>${place}</li>`).join('')}</ul><p>To dobry punkt wyjścia do poznawania miasta ze znajomymi z roku, grupy uczelnianej albo wydarzeń studenckich.</p></div></details><details><summary><span>03</span><strong>Mieszkanie i dojazdy na uczelnię</strong><i>+</i></summary><div class="seo-detail-body"><p>Przy szukaniu pokoju w ${cityLocative} sprawdź trasę do konkretnego budynku wydziału w godzinach porannych. Tańsza oferta nie zawsze jest korzystniejsza, jeśli wymaga kilku przesiadek albo długich powrotów wieczorem.</p><ul><li>Porównaj czynsz, opłaty, internet i wysokość kaucji.</li><li>Sprawdź przystanki oraz częstotliwość połączeń.</li><li>Obejrzyj okolicę i części wspólne przed podpisaniem umowy.</li><li>Zapisz stan wyposażenia w protokole odbioru.</li></ul><a href="/poradniki.html#mieszkanie">Przeczytaj poradnik o bezpiecznym wynajmie →</a></div></details><details><summary><span>04</span><strong>Pierwszy miesiąc studiów w ${cityLocative}</strong><i>+</i></summary><div class="seo-detail-body"><ul><li>Aktywuj pocztę i system swojej uczelni.</li><li>Znajdź bibliotekę, dziekanat i punkt obsługi studenta.</li><li>Dołącz do głównej grupy miasta oraz grupy swojej uczelni.</li><li>Sprawdź wydarzenia integracyjne i koła zainteresowań.</li><li>Zapisz terminy składania wniosków o akademik i stypendia.</li></ul><a href="/poradniki.html#start">Zobacz checklistę na pierwsze tygodnie →</a></div></details><details><summary><span>05</span><strong>Jak poznać innych studentów?</strong><i>+</i></summary><div class="seo-detail-body"><p>Najłatwiej zacząć od grupy miejskiej, grupy swojej uczelni i osób z zajęć. W ${cityLocative} warto śledzić również wydarzenia integracyjne, koła naukowe, sport akademicki i wolontariat. Regularna obecność w kilku miejscach zwykle działa lepiej niż próba uczestniczenia we wszystkim.</p><a href="/poradniki.html#ludzie">Więcej o życiu studenckim po zajęciach →</a></div></details><details><summary><span>06</span><strong>Praktyczny start — najważniejsze poradniki</strong><i>+</i></summary><div class="seo-detail-body guide-links"><a href="/poradniki.html#akademik">Akademik czy mieszkanie?</a><a href="/poradniki.html#budzet">Budżet studenta</a><a href="/poradniki.html#stypendia">Stypendia i pomoc materialna</a><a href="/poradniki.html#sesja">Pierwsza sesja</a><a href="/poradniki.html#praca">Praca podczas studiów</a><a href="/poradniki.html#bezpieczenstwo">Bezpieczeństwo i oszustwa</a><a href="/poradniki.html#rekrutacja">Rekrutacja na studia</a><a href="/poradniki.html#kierunek">Jak wybrać kierunek?</a></div></details></div></section>`:'';
 const universitySeoSection=universityGroups.length?`<section class="city-seo city-seo-universities" aria-labelledby="city-university-guide-title"><div class="city-seo-head"><div><p class="overline blue">UCZELNIE I GRUPY</p><h2 id="city-university-guide-title">Uczelnie w ${cityLocative}<br><em>i grupy studentów.</em></h2></div><p>Ta część jest na dole strony, bo najważniejsze akcje są wyżej. Pomaga jednak szybko odnaleźć uczelnie, skróty nazw i grupy dla rocznika 2026.</p></div><div class="university-seo-list">${universityGroups.map(group=>`<article><h3>${group[1]}</h3><p><strong>${group[0]}</strong> — grupa dla studentów i kandydatów uczelni ${group[1]} w ${cityLocative}. To dobre miejsce na pytania o rekrutację, zajęcia, kierunki, dojazdy i pierwsze tygodnie studiowania.</p><a href="${group[2]}" target="_blank" rel="noopener noreferrer">Przejdź do grupy ${group[0]} ↗</a></article>`).join('')}</div></section>`:'';
 const cityFaqSection=`<section class="city-seo city-faq-section" aria-labelledby="city-faq-title"><div class="city-seo-head"><div><p class="overline blue">FAQ DLA STUDENTÓW</p><h2 id="city-faq-title">${city.name}<br><em>— pytania i odpowiedzi.</em></h2></div><p>Krótka sekcja na końcu strony — dla osób, które szukają konkretnych informacji o studiowaniu, grupach, uczelniach i wydarzeniach w ${cityLocative}.</p></div><div class="city-seo-details">${cityFaqItems.map((item,index)=>`<details><summary><span>${String(index+1).padStart(2,'0')}</span><strong>${item[0]}</strong><i>+</i></summary><div class="seo-detail-body"><p>${item[1]}</p></div></details>`).join('')}</div></section>`;

@@ -18,14 +18,23 @@ if (data.CITIES.length !== 43) fail(`Expected 43 cities, found ${data.CITIES.len
 for (const city of data.CITIES) {
   const page = `${city.slug}/index.html`;
   const image = city.image.replace(/\.(?:jpe?g|png)$/i, '.webp');
+  const shareImage = `assets/share/${city.slug}.jpg`;
   if (!exists(page)) fail(`Missing page: ${page}`);
   if (!exists(image)) fail(`Missing optimized city image: ${image}`);
+  if (!exists(shareImage)) fail(`Missing social sharing image: ${shareImage}`);
   if (!content[city.slug]) fail(`Missing city content: ${city.slug}`);
 
   const html = read(page);
   const canonical = `https://grupystudenckie.pl/${city.slug}/`;
   if (!html.includes(`data-city-slug="${city.slug}"`)) fail(`Missing city slug in ${page}`);
   if (!html.includes(`href="${canonical}"`)) fail(`Wrong canonical in ${page}`);
+  if (!html.includes('<main id="cityPage"><section class="city-hero"')) fail(`Missing pre-rendered city content in ${page}`);
+  if (!html.includes('class="city-seo city-faq-section"')) fail(`Missing city FAQ in ${page}`);
+  if (!html.includes('data-city-schema')) fail(`Missing structured data in ${page}`);
+  if (!html.includes(`property="og:image" content="https://grupystudenckie.pl/assets/share/${city.slug}.jpg"`)) fail(`Wrong sharing image in ${page}`);
+  if (!html.includes('property="og:image:width" content="1200"')) fail(`Missing sharing image width in ${page}`);
+  if (!html.includes('property="og:image:height" content="630"')) fail(`Missing sharing image height in ${page}`);
+  if (html.includes('<main id="cityPage"></main>')) fail(`Empty city content in ${page}`);
   if (!sitemap.includes(`<loc>${canonical}</loc>`)) fail(`Missing sitemap URL: ${canonical}`);
 
   for (const event of data.CITY_EVENTS[city.slug] || []) {
