@@ -16,6 +16,29 @@ structuredData.textContent=JSON.stringify({
   url:`${siteUrl}/`,
   description:'Przewodnik po miastach akademickich, grupach studenckich, uczelniach i wydarzeniach w Polsce.',
   inLanguage:'pl-PL',
+  publisher:{
+    '@type':'Organization',
+    name:'Studenci Polska',
+    url:`${siteUrl}/`
+  },
+  potentialAction:{
+    '@type':'SearchAction',
+    target:`${siteUrl}/?q={search_term_string}#miasta`,
+    'query-input':'required name=search_term_string'
+  },
+  hasPart:[
+    {
+      '@type':'CollectionPage',
+      name:'Poradniki dla studentów',
+      url:`${siteUrl}/poradniki.html`
+    },
+    ...CITIES.map(city=>({
+      '@type':'WebPage',
+      name:`Studenci ${city.name}`,
+      url:`${siteUrl}/city.html?miasto=${encodeURIComponent(city.slug)}`,
+      about:`Studia, uczelnie, wydarzenia i grupy studenckie w mieście ${city.name}`
+    }))
+  ],
   mainEntity:{
     '@type':'ItemList',
     numberOfItems:CITIES.length,
@@ -29,5 +52,8 @@ structuredData.textContent=JSON.stringify({
 });
 document.head.appendChild(structuredData);
 function render(list){grid.innerHTML=list.map(c=>`<a class="city-card" href="city.html?miasto=${c.slug}" aria-label="Otwórz przewodnik: ${c.name}"><img src="${c.image}" alt="${c.name} — miejski krajobraz" loading="lazy"><span class="num">${c.number}</span><span class="go">↗</span><div class="card-copy"><small>${c.region.toUpperCase()}</small><h3>${c.name}</h3><p>${c.tag}</p></div></a>`).join('');counter.textContent=`${list.length} ${list.length===1?'miasto':'miasta'}`;empty.style.display=list.length?'none':'block'}
-render(CITIES);
-input.addEventListener('input',()=>{const q=input.value.toLocaleLowerCase('pl').trim();render(CITIES.filter(c=>`${c.name} ${c.region} ${c.tag}`.toLocaleLowerCase('pl').includes(q)))})
+function filterCities(){const q=input.value.toLocaleLowerCase('pl').trim();render(CITIES.filter(c=>`${c.name} ${c.region} ${c.tag}`.toLocaleLowerCase('pl').includes(q)))}
+const initialQuery=new URLSearchParams(location.search).get('q');
+if(initialQuery)input.value=initialQuery;
+filterCities();
+input.addEventListener('input',filterCities)

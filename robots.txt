@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /analytics/
 
 Sitemap: https://grupystudenckie.pl/sitemap.xml
