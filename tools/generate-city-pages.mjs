@@ -29,6 +29,7 @@ const rootify=html=>html
   .replaceAll('href="index.html#jak-wybrac"','href="/#jak-wybrac"')
   .replaceAll('href="index.html"','href="/"')
   .replaceAll('href="poradniki.html"','href="/poradniki.html"')
+  .replaceAll('href="grupy-tematyczne.html"','href="/grupy-tematyczne.html"')
   .replaceAll('src="data.js"','src="/data.js"')
   .replaceAll('src="city-content.js"','src="/city-content.js"')
   .replaceAll('src="city.js"','src="/city.js"')
@@ -106,7 +107,7 @@ for(const [index,city] of data.CITIES.entries()){
 }
 
 const today=new Date().toISOString().slice(0,10);
-const entries=[['https://grupystudenckie.pl/','1.0'],['https://grupystudenckie.pl/poradniki.html','0.9'],...data.CITIES.map(city=>[`https://grupystudenckie.pl/${city.slug}/`,'0.8']),...GUIDES.map(guide=>[`https://grupystudenckie.pl/poradniki/${guide.slug}/`,'0.7'])];
+const entries=[['https://grupystudenckie.pl/','1.0'],['https://grupystudenckie.pl/poradniki.html','0.9'],['https://grupystudenckie.pl/grupy-tematyczne.html','0.8'],['https://grupystudenckie.pl/en/','0.7'],...data.CITIES.map(city=>[`https://grupystudenckie.pl/${city.slug}/`,'0.8']),...GUIDES.map(guide=>[`https://grupystudenckie.pl/poradniki/${guide.slug}/`,'0.7'])];
 const sitemap=`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${entries.map(([url,priority])=>`  <url><loc>${url}</loc><lastmod>${today}</lastmod><priority>${priority}</priority></url>`).join('\n')}\n</urlset>\n`;
 fs.writeFileSync(path.join(root,'sitemap.xml'),sitemap);
 console.log(`Generated ${data.CITIES.length} fully rendered city pages and sitemap.xml`);

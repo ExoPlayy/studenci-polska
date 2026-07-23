@@ -80,6 +80,10 @@
       send('newsletter_click', { name: 'Studencki newsletter', target: link.href });
     } else if (link.matches('.insurance-action')) {
       send('insurance_click', { name: 'Ubezpiecz się na studiach', target: link.href });
+    } else if (link.matches('.theme-group-card, .en-theme-card')) {
+      send('thematic_group_click', { name: text(link, 'h2') || text(link, 'h3'), target: link.href });
+    } else if (link.matches('.language-switch')) {
+      send('language_click', { name: text(link), target: link.href });
     } else if (link.matches('.hero-group-card')) {
       const candidates = link.href.indexOf('studia2025') !== -1;
       send(candidates ? 'candidate_group_click' : 'national_group_click', {

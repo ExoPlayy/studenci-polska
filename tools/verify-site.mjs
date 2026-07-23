@@ -12,7 +12,7 @@ const content=vm.runInNewContext(`${read('city-content.js')};CITY_CONTENT`);
 const sitemap=read('sitemap.xml');
 
 if(data.CITIES.length!==43) fail(`Expected 43 cities, found ${data.CITIES.length}`);
-if(GUIDES.length!==18) fail(`Expected 18 guides, found ${GUIDES.length}`);
+if(GUIDES.length!==24) fail(`Expected 24 guides, found ${GUIDES.length}`);
 
 for(const city of data.CITIES){
   const page=`${city.slug}/index.html`;
@@ -61,9 +61,25 @@ for(const guide of GUIDES){
 
 const home=read('index.html');
 if(!home.includes('assets/share/home.jpg')||!home.includes('og:image:width')||!home.includes('id="main-content"')) fail('Homepage social metadata or accessibility marker is missing');
+if(!home.includes('grupy-tematyczne.html')||!home.includes('href="/en/"')||!home.includes('hreflang="en"')) fail('Homepage thematic groups or language navigation is missing');
 const hub=read('poradniki.html');
 if(!hub.includes('assets/share/guides.jpg')||!hub.includes('"@type":"CollectionPage"')) fail('Guide hub metadata is incomplete');
-if(sitemap.includes('city.html?miasto=')||sitemap.includes('poradniki.html#')) fail('Legacy URLs remain in sitemap');
-if((sitemap.match(/<url>/g)||[]).length!==63) fail('Sitemap must contain 63 URLs');
+if(!hub.includes('class="theme-guide-promo"')||!hub.includes('grupy-tematyczne.html')) fail('Guide hub thematic promotion is missing');
 
-console.log('OK: 43 cities, 18 guides, 20 social cards, clean links, schemas and 63 sitemap URLs verified.');
+const groups=read('grupy-tematyczne.html');
+if((groups.match(/class="theme-group-card"/g)||[]).length!==8) fail('Thematic group page must contain 8 group cards');
+if(!groups.includes('assets/share/groups.jpg')||!groups.includes('"@type":"CollectionPage"')||!groups.includes('"@type":"FAQPage"')) fail('Thematic group metadata or schema is incomplete');
+if(!groups.includes('data-group-topic=')) fail('Thematic group analytics hooks are missing');
+for(const image of ['biznes','szkolenia','ai','moda','gaming','praca-zdalna','zdrowie','wyjazdy']){
+  if(!exists(`assets/groups/${image}.webp`)) fail(`Missing thematic group image: ${image}`);
+}
+
+const english=read('en/index.html');
+if(!english.includes('<html lang="en">')||!english.includes('hreflang="pl"')||!english.includes('href="#communities"')) fail('English starter page is incomplete');
+if((english.match(/class="en-city-card"/g)||[]).length!==43) fail('English starter page must contain 43 city links');
+if((english.match(/class="en-theme-card"/g)||[]).length!==8) fail('English starter page must contain 8 thematic groups');
+if(!sitemap.includes('<loc>https://grupystudenckie.pl/en/</loc>')||!sitemap.includes('<loc>https://grupystudenckie.pl/grupy-tematyczne.html</loc>')) fail('English or thematic page is missing from sitemap');
+if(sitemap.includes('city.html?miasto=')||sitemap.includes('poradniki.html#')) fail('Legacy URLs remain in sitemap');
+if((sitemap.match(/<url>/g)||[]).length!==71) fail('Sitemap must contain 71 URLs');
+
+console.log('OK: 43 cities, 24 guides, 8 thematic groups, English starter and 71 sitemap URLs verified.');

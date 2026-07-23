@@ -16,7 +16,13 @@ export const GUIDES=[
   ['legitymacja','legitymacja-studencka-i-znizki','Legitymacja studencka i zniżki','Ważność dokumentu, bilety, ulgi i bezpieczne korzystanie z legitymacji studenckiej.'],
   ['organizacja','organizacja-nauki-na-studiach','Organizacja nauki na studiach','Jeden kalendarz, priorytety, terminy projektów i regularne powtórki bez przeciążenia.'],
   ['portfolio','kola-naukowe-i-portfolio','Koła naukowe i portfolio studenta','Jak wybierać aktywności, dokumentować projekty i zamieniać doświadczenie w dobre portfolio.'],
-  ['wyjazdy','erasmus-i-wyjazdy-studenckie','Erasmus i wyjazdy studenckie','Język, przedmioty, budżet, dokumenty i przygotowanie do wyjazdu zagranicznego.']
+  ['wyjazdy','erasmus-i-wyjazdy-studenckie','Erasmus i wyjazdy studenckie','Język, przedmioty, budżet, dokumenty i przygotowanie do wyjazdu zagranicznego.'],
+  ['biznes','jak-zaczac-biznes-na-studiach','Jak zacząć biznes na studiach?','Od pomysłu i pierwszego klienta po prosty budżet, testowanie usługi i bezpieczne formalności.'],
+  ['szkolenia','kursy-i-szkolenia-dla-studentow','Kursy i szkolenia dla studentów','Jak wybierać wartościowe kursy, warsztaty i certyfikaty bez przepłacania i kolekcjonowania przypadkowych szkoleń.'],
+  ['ai','ai-w-nauce-i-pracy-studenta','AI w nauce i pracy studenta','Jak rozsądnie korzystać ze sztucznej inteligencji na studiach, rozwijać kompetencje i nie naruszać zasad uczelni.'],
+  ['moda','moda-cyrkularna-i-wymiana-ubran','Moda cyrkularna i wymiana ubrań','Bezpieczna sprzedaż, kupowanie i wymiana ubrań między studentami oraz sposoby na bardziej świadomą garderobę.'],
+  ['praca-zdalna','jak-znalezc-prace-zdalna-na-studiach','Jak znaleźć pracę zdalną na studiach?','Gdzie szukać zleceń, jak sprawdzać ogłoszenia i przygotować się do pierwszej bezpiecznej współpracy online.'],
+  ['tanie-wyjazdy','tanie-wyjazdy-studenckie','Tanie wyjazdy studenckie','Planowanie transportu, noclegu, budżetu i bezpieczeństwa podczas niedrogich wyjazdów ze znajomymi.']
 ].map(([anchor,slug,title,description],index)=>({anchor,slug,title,description,number:String(index+1).padStart(2,'0')}));
 
 export const GUIDE_BY_ANCHOR=Object.fromEntries(GUIDES.map(guide=>[guide.anchor,guide]));
